@@ -2,12 +2,15 @@ CC = cc
 
 FLAG = -Wall -Werror -Wextra -g3
 
+SUPFLAG = -pthread
+
 INCLUDE = -I .
 
 NAME = Philosopher
 
 SOURCE = main.c \
-utils_1.c
+utils_1.c \
+error_handler.c
 
 OBJ = $(SOURCE:%.c=obj/%.o)
 
@@ -21,7 +24,7 @@ $(NAME) : $(OBJ)
 
 $(OBJPATH)/%.o : %.c
 	mkdir -p $(dir $@)
-	$(CC) $(FLAG) -c $< -o $@ $(INCLUDE)
+	$(CC) $(FLAG) -c $< -o $@ $(INCLUDE) $(SUPFLAG)
 
 clean :
 	rm -r $(OBJPATH)
