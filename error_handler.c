@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 17:40:17 by michen            #+#    #+#             */
-/*   Updated: 2024/12/07 18:18:53 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/09 19:05:58 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	args_nb_error(void)
 {
 	printf(RED "Invalid number of args\n" RESET);
-	printf(GREEN "Usage : ./philosopher <number_of_philosopher> ");
+	printf(GREEN "Usage : ./philo <number_of_philosopher> ");
 	printf("<time_to_die(ms)> <time_to_eat(ms)> <time_to_sleep(ms)>\n" RESET);
 	printf(YELW "Optional : <number_of_times_");
 	printf("each_philosopher_must_eat(ms)>\n" RESET);
