@@ -9,9 +9,11 @@ INCLUDE = -I .
 NAME = philo
 
 SOURCE = main.c \
-utils_/utils_1.c \
+utils.c \
+monitor.c \
 setup.c \
 forks.c \
+status.c \
 error_handler.c
 
 OBJ = $(SOURCE:%.c=obj/%.o)

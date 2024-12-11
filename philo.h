@@ -85,12 +85,17 @@ long	get_time_ms(struct timeval it);
 void	print_activity(t_philo *philo, t_activity activity);
 
 
+/* -------- status.c -------- */
+int		is_the_end(t_philo *philo);
+void	set_status(t_philo *philo, t_status status);
+
+
 /* -------- forks.c -------- */
 void	take_forks(t_philo *philo);
 void	free_forks(t_philo *philo);
 
 
-/* -------- simulation.c -------- */
+/* -------- monitor.c -------- */
 void	start_simulation(t_config *config);
 void	monitoring(t_config *config);
 void	end_simulation(t_config *config);

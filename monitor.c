@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simulation.c                                       :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:40:39 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 19:02:36 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/11 19:35:37 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void monitoring(t_config *config)
 
 	while (TRUE)
 	{
+		// printf("monitoring\n");
 		x = 0;
 		finished_nb = 0;
 		while (x < config->philos_nb)
@@ -51,6 +52,7 @@ void monitoring(t_config *config)
 		}
 		if (finished_nb == config->philos_nb)
 			return;
+		usleep(500);
 	}
 }
 
@@ -60,7 +62,7 @@ void end_simulation(t_config *config)
 
 	x = 0;
 	while (x < config->philos_nb)
-	{
+	{		
 		pthread_mutex_lock(&(config->status_m[x]));
 		config->status[x] = END;
 		pthread_mutex_unlock(&(config->status_m[x]));
