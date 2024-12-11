@@ -6,11 +6,15 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:42:09 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 16:34:46 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/11 18:40:19 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// int		check_death(){return 0;}
+
+// long	time_to_die_half()
 
 void	*routine(void *info)
 {
@@ -41,31 +45,6 @@ void	*routine(void *info)
 	return (NULL);
 }
 
-void	start_simulation(t_config *config)
-{
-	int		max_philo;
-	int		x;
-
-	max_philo = config->philos_nb;
-	x = 0;
-	pthread_mutex_lock(&(config->start_m));
-	while (x < max_philo)
-	{
-		pthread_create(&(config->thread[x]), NULL, &routine, &(config->philos[x]));
-		x++;
-	}
-
-	config->start = TRUE;
-	pthread_mutex_unlock(&(config->start_m));
-
-	x = 0;
-	while (x < max_philo)
-	{
-		pthread_join(config->thread[x], NULL);
-		x++;
-	}
-}
-
 int	main(int ac, char **av)
 {
 	t_config		config;
@@ -77,7 +56,8 @@ int	main(int ac, char **av)
 	
 	// simulation....
 	start_simulation(&config);
-	sleep(1);
+
+	end_simulation(&config);
 	free_config(&config);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:55:48 by michen            #+#    #+#             */
-/*   Updated: 2024/12/10 20:29:41 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/11 18:51:39 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_config(t_config *config)
 	free(config->philos);
 	free(config->thread);
 	free(config->forks_m);
+	free(config->status);
+	free(config->status_m);
 }
 
 int	init_config(t_config *config, char **av)
@@ -33,7 +35,10 @@ int	init_config(t_config *config, char **av)
 	config->philos = malloc(sizeof(t_philo) * config->philos_nb);
 	config->thread = malloc(sizeof(pthread_t) * config->philos_nb);
 	config->forks_m = malloc(sizeof(pthread_mutex_t) * config->philos_nb);
-	if (!config->philos || !config->forks_m || !config->thread)
+	config->status_m = malloc(sizeof(pthread_mutex_t) * config->philos_nb);
+	config->status = malloc(sizeof(int) * config->philos_nb);
+	if (!config->status || !config->status_m || !config->philos
+		|| !config->forks_m || !config->thread)
 	{
 		free_config(config);
 		return (0);
@@ -50,6 +55,10 @@ void	init_philos(t_config *config)
 	x = 0;
 	while (x < config->philos_nb)
 	{
+		config->philos[x].status = &(config->status[x]);
+		*(config->philos[x].status) = LIVING;
+		config->philos[x].status_m = &(config->status_m[x]);
+
 		config->philos[x].die = config->die;
 		config->philos[x].eat = config->eat;
 		config->philos[x].sleep = config->sleep;
@@ -60,7 +69,10 @@ void	init_philos(t_config *config)
 		config->philos[x].print_m = &config->print_m;
 		config->philos[x].start_m = &config->start_m;
 		config->philos[x].forks_m = config->forks_m;
+
 		pthread_mutex_init(&(config->philos[x].forks_m[x]), NULL);
+		pthread_mutex_init(config->philos[x].status_m, NULL);
+
 		x++;
 	}
 }

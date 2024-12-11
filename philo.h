@@ -13,6 +13,13 @@
 # include <sys/time.h>
 # include <unistd.h>
 
+typedef enum e_status {
+	LIVING,		// when philo enjoys life with meaningful reasons
+	FINISHED,	// when philo ate enough, but still living
+	DIED,		// when philo dies
+	END			// when monitor stops simulation
+}	t_status;
+
 typedef enum e_activity {
 	FORKS,
 	EAT,
@@ -35,6 +42,9 @@ typedef struct 			s_philo
 	int 				philos_nb;		// --local
 	long 				origin;			// --local
 	long 				last_meal;		// --local
+
+	pthread_mutex_t 	*status_m;		// --shared
+	int					*status;		// --shared
 }						t_philo;
 
 typedef struct 			s_config
@@ -50,6 +60,9 @@ typedef struct 			s_config
 	int					sleep;
 	int					to_eat;
 	int					philos_nb;
+
+	pthread_mutex_t 	*status_m;		// size:av[1]
+	int					*status;		// size:av[1]
 }		t_config;
 
 
@@ -77,10 +90,15 @@ void	take_forks(t_philo *philo);
 void	free_forks(t_philo *philo);
 
 
+/* -------- simulation.c -------- */
+void	start_simulation(t_config *config);
+void	monitoring(t_config *config);
+void	end_simulation(t_config *config);
+
+
 /* -------- main.c -------- */
 void	*routine(void *test);
 void	start_simulation(t_config *config);
 int		main(int ac, char **av);
-
 
 #endif
