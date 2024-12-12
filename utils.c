@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_1.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:35:39 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 16:27:11 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/12 19:20:03 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,37 @@ void	print_activity(t_philo *philo, t_activity activity)
 		printf("%ld %d died\n", timestamp, philo->index);
 	}
 	pthread_mutex_unlock(philo->print_m);
+}
+
+int	fragmented_sleep(t_philo *philo, int const task_time_ms)
+{
+	struct timeval	time_start;
+	struct timeval	now;
+	long			start;
+
+	gettimeofday(&time_start, NULL);
+	start = get_time_ms(time_start);
+	while (TRUE)
+	{
+		gettimeofday(&now, NULL);
+		if (get_time_ms(now) - start >= task_time_ms)
+			break ;
+		if (must_die(philo))
+		{
+			print_activity(philo, DIE);
+			return (1);
+		}
+		if (is_the_end(philo))
+			return (1);
+		usleep(FRAGMENT_US);
+	}
+	return (is_the_end(philo));
+}
+
+void	reset_last_meal(t_philo *philo)
+{	
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	philo->last_meal = get_time_ms(now);
 }

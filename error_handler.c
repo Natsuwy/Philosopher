@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 17:40:17 by michen            #+#    #+#             */
-/*   Updated: 2024/12/09 19:05:58 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/12 19:15:18 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,26 @@ void	args_value_error(void)
 	printf(RED "Invalid number : negative/null parameter forbbiden\n" RESET);
 }
 
+void	single_philo_error(void)
+{
+	printf(RED "Invalid number : a philo needs a friend to eat\n" RESET);
+}
+
 int	is_av_usable(int ac, char **av)
 {
 	int	x;
 
-	x = 1;
 	if (ac != 5 && ac != 6)
 	{
 		args_nb_error();
 		return (0);
 	}
+	if (ft_atoi(av[1]) == 1)
+	{
+		single_philo_error();
+		return (0);
+	}
+	x = 1;
 	while (av[x])
 	{
 		if (ft_atoi(av[x]) <= 0)

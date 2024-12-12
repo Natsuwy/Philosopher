@@ -6,13 +6,13 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:40:39 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 19:35:37 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/12 19:19:02 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void start_simulation(t_config *config)
+void	start_simulation(t_config *config)
 {
 	int		x;
 
@@ -20,15 +20,15 @@ void start_simulation(t_config *config)
 	pthread_mutex_lock(&(config->start_m));
 	while (x < config->philos_nb)
 	{
-		pthread_create(&(config->thread[x]), NULL, &routine, &(config->philos[x]));
+		pthread_create(&(config->thread[x]), NULL, &routine,
+			&(config->philos[x]));
 		x++;
 	}
-
 	config->start = TRUE;
 	pthread_mutex_unlock(&(config->start_m));
 }
 
-void monitoring(t_config *config)
+void	monitoring(t_config *config)
 {
 	int	x;
 	int	finished_nb;
@@ -36,7 +36,6 @@ void monitoring(t_config *config)
 
 	while (TRUE)
 	{
-		// printf("monitoring\n");
 		x = 0;
 		finished_nb = 0;
 		while (x < config->philos_nb)
@@ -47,18 +46,18 @@ void monitoring(t_config *config)
 			if (status == FINISHED)
 				finished_nb++;
 			if (status == DIED)
-				return;
+				return ;
 			x++;
 		}
 		if (finished_nb == config->philos_nb)
-			return;
-		usleep(500);
+			return ;
+		usleep(1000);
 	}
 }
 
-void end_simulation(t_config *config)
+void	end_simulation(t_config *config)
 {
-	int x;
+	int	x;
 
 	x = 0;
 	while (x < config->philos_nb)
@@ -68,7 +67,6 @@ void end_simulation(t_config *config)
 		pthread_mutex_unlock(&(config->status_m[x]));
 		x++;
 	}
-
 	x = 0;
 	while (x < config->philos_nb)
 	{

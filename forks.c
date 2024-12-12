@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 17:52:08 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 19:23:49 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/12 18:52:06 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	take_forks(t_philo *philo)
 
 void	free_forks(t_philo *philo)
 {
-	if (philo->index % 2 == 0)
+	if (philo->index % 2)
 	{
 		pthread_mutex_unlock(&philo->forks_m[philo->index]);
 		pthread_mutex_unlock(&philo->forks_m[(philo->index + 1)

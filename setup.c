@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:55:48 by michen            #+#    #+#             */
-/*   Updated: 2024/12/11 18:51:39 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/12 19:19:16 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	init_philos(t_config *config)
 		config->philos[x].status = &(config->status[x]);
 		*(config->philos[x].status) = LIVING;
 		config->philos[x].status_m = &(config->status_m[x]);
-
 		config->philos[x].die = config->die;
 		config->philos[x].eat = config->eat;
 		config->philos[x].sleep = config->sleep;
@@ -69,10 +68,8 @@ void	init_philos(t_config *config)
 		config->philos[x].print_m = &config->print_m;
 		config->philos[x].start_m = &config->start_m;
 		config->philos[x].forks_m = config->forks_m;
-
 		pthread_mutex_init(&(config->philos[x].forks_m[x]), NULL);
 		pthread_mutex_init(config->philos[x].status_m, NULL);
-
 		x++;
 	}
 }
