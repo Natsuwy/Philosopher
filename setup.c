@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:55:48 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:19:16 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:02:32 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	free_config(t_config *config)
 	free(config->forks_m);
 	free(config->status);
 	free(config->status_m);
+	free(config->last_meals_m);
+	free(config->last_meals);
 }
 
 int	init_config(t_config *config, char **av)
@@ -32,13 +34,15 @@ int	init_config(t_config *config, char **av)
 	else
 		config->to_eat = UNLIMITED;
 	config->start = FALSE;
+	config->last_meals_m = malloc(sizeof(pthread_mutex_t) * config->philos_nb);
+	config->last_meals = malloc(sizeof(long) * config->philos_nb);
 	config->philos = malloc(sizeof(t_philo) * config->philos_nb);
 	config->thread = malloc(sizeof(pthread_t) * config->philos_nb);
 	config->forks_m = malloc(sizeof(pthread_mutex_t) * config->philos_nb);
 	config->status_m = malloc(sizeof(pthread_mutex_t) * config->philos_nb);
 	config->status = malloc(sizeof(int) * config->philos_nb);
-	if (!config->status || !config->status_m || !config->philos
-		|| !config->forks_m || !config->thread)
+	if (!config->status || !config->forks_m || !config->philos || !config->thread
+		|| !config->status_m || !config->last_meals_m || !config->last_meals)
 	{
 		free_config(config);
 		return (0);
@@ -65,9 +69,13 @@ void	init_philos(t_config *config)
 		config->philos[x].index = x;
 		config->philos[x].start = &config->start;
 		config->philos[x].philos_nb = config->philos_nb;
+		config->philos[x].last_meal_m = &(config->last_meals_m[x]);
+		config->philos[x].last_meal = &(config->last_meals[x]);
+		*config->philos[x].last_meal = UNDEFINED;
 		config->philos[x].print_m = &config->print_m;
 		config->philos[x].start_m = &config->start_m;
 		config->philos[x].forks_m = config->forks_m;
+		pthread_mutex_init(config->philos[x].last_meal_m, NULL);
 		pthread_mutex_init(&(config->philos[x].forks_m[x]), NULL);
 		pthread_mutex_init(config->philos[x].status_m, NULL);
 		x++;

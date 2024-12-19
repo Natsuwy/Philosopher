@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:40:39 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:19:02 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 18:59:58 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,18 @@ void	monitoring(t_config *config)
 			pthread_mutex_unlock(&(config->status_m[x]));
 			if (status == FINISHED)
 				finished_nb++;
-			if (status == DIED)
+			if (must_die(&config->philos[x]))
+			{
+				pthread_mutex_lock(&(config->status_m[x]));
+				config->status[x] = DIED;
+				pthread_mutex_unlock(&(config->status_m[x]));
 				return ;
+			}
 			x++;
 		}
 		if (finished_nb == config->philos_nb)
 			return ;
-		usleep(1000);
+		usleep(FRAGMENT_US);
 	}
 }
 
@@ -63,7 +68,8 @@ void	end_simulation(t_config *config)
 	while (x < config->philos_nb)
 	{		
 		pthread_mutex_lock(&(config->status_m[x]));
-		config->status[x] = END;
+		if (config->status[x] != DIED)
+			config->status[x] = END;
 		pthread_mutex_unlock(&(config->status_m[x]));
 		x++;
 	}

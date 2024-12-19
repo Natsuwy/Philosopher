@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:28:06 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:28:12 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:07:16 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define TRUE 1
 # define FALSE 0
 # define UNLIMITED -1
+# define UNDEFINED -2
 
 # define FRAGMENT_US 100
 
@@ -57,7 +58,10 @@ typedef struct s_philo
 	int				index;
 	int				philos_nb;
 	long			origin;
-	long			last_meal;
+
+	pthread_mutex_t	*last_meal_m;
+	long			*last_meal;
+
 
 	pthread_mutex_t	*status_m;
 	int				*status;
@@ -66,16 +70,26 @@ typedef struct s_philo
 typedef struct s_config
 {
 	t_philo			*philos;
+
 	pthread_t		*thread;
+
 	pthread_mutex_t	*forks_m;
+
 	pthread_mutex_t	print_m;
+
 	pthread_mutex_t	start_m;
 	int				start;
+
 	int				die;
 	int				eat;
 	int				sleep;
+
 	int				to_eat;
+
 	int				philos_nb;
+
+	pthread_mutex_t	*last_meals_m;	// sizeof(av[1])
+	long			*last_meals;	// sizeof(av[1])
 
 	pthread_mutex_t	*status_m;
 	int				*status;
@@ -101,7 +115,7 @@ int					fragmented_sleep(t_philo *philo, int task_time_us);
 void				reset_last_meal(t_philo *philo);
 
 /* -------- status.c -------- */
-int					is_the_end(t_philo *philo);
+int					must_stop(t_philo *philo);
 int					must_die(t_philo *philo);
 void				set_status(t_philo *philo, t_status status);
 

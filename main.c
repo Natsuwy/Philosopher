@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:42:09 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:26:02 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:07:28 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	setup_routine(t_philo *philo)
 		continue ;
 	gettimeofday(&origin, NULL);
 	philo->origin = get_time_ms(origin);
-	philo->last_meal = get_time_ms(origin);
+	*philo->last_meal = get_time_ms(origin);
 	if (philo->index % 2 == 1 && fragmented_sleep(philo, philo->eat))
 		return (1);
 	return (0);
@@ -42,9 +42,14 @@ void	*routine(void *info)
 
 	if (setup_routine(philo))
 		return (NULL);
-	while (!is_the_end(philo))
+	while (!must_stop(philo))
 	{
 		take_forks(philo);
+		if (must_stop(philo))
+		{
+			free_forks(philo);
+			return (NULL);
+		}
 		print_activity(philo, EAT);
 		reset_last_meal(philo);
 		if (fragmented_sleep(philo, philo->eat))
@@ -78,3 +83,15 @@ int	main(int ac, char **av)
 	free_config(&config);
 	return (0);
 }
+
+
+// setup
+// [x]
+
+// monitor: check if	(1) tous les philos sont finished [THEN] tous a END
+//						(2) now - last_meal > time_to_die [THEN] tous a END sauf ce philo qu'on met a DIED
+// [ ]
+
+// philo: check if 		(1) son status est a END [THEN] (unlock forks if taken) return;
+//						(2) son status est a DIED [THEN] (unlock forks if taken) print_activity(DIE) et return;
+// [x]

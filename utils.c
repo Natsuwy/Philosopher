@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:35:39 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:20:03 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:07:28 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,11 @@ int	fragmented_sleep(t_philo *philo, int const task_time_ms)
 		gettimeofday(&now, NULL);
 		if (get_time_ms(now) - start >= task_time_ms)
 			break ;
-		if (must_die(philo))
-		{
-			print_activity(philo, DIE);
-			return (1);
-		}
-		if (is_the_end(philo))
+		if (must_stop(philo))
 			return (1);
 		usleep(FRAGMENT_US);
 	}
-	return (is_the_end(philo));
+	return (must_stop(philo));
 }
 
 void	reset_last_meal(t_philo *philo)
@@ -103,5 +98,7 @@ void	reset_last_meal(t_philo *philo)
 	struct timeval	now;
 
 	gettimeofday(&now, NULL);
-	philo->last_meal = get_time_ms(now);
+	pthread_mutex_lock(philo->last_meal_m);
+	*philo->last_meal = get_time_ms(now);
+	pthread_mutex_unlock(philo->last_meal_m);
 }
