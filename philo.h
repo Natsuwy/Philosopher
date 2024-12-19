@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:28:06 by michen            #+#    #+#             */
-/*   Updated: 2024/12/19 19:07:16 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:23:29 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ typedef struct s_config
 /* -------- error_handler.c -------- */
 void				args_nb_error(void);
 void				args_value_error(void);
-void				single_philo_error(void);
+void				single_philo_error(int time_to_die_ms);
 int					is_av_usable(int ac, char **av);
 
 /* -------- setup.c -------- */

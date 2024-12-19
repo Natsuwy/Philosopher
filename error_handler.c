@@ -6,7 +6,7 @@
 /*   By: michen <michen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 17:40:17 by michen            #+#    #+#             */
-/*   Updated: 2024/12/12 19:15:18 by michen           ###   ########.fr       */
+/*   Updated: 2024/12/19 19:23:15 by michen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	args_value_error(void)
 	printf(RED "Invalid number : negative/null parameter forbbiden\n" RESET);
 }
 
-void	single_philo_error(void)
+void	single_philo_error(int time_to_die_ms)
 {
-	printf(RED "Invalid number : a philo needs a friend to eat\n" RESET);
+	printf("0 0 has taken a fork\n");
+	usleep(time_to_die_ms * 1000);
+	printf("%d 0 died\n", time_to_die_ms);
 }
 
 int	is_av_usable(int ac, char **av)
@@ -40,11 +42,6 @@ int	is_av_usable(int ac, char **av)
 		args_nb_error();
 		return (0);
 	}
-	if (ft_atoi(av[1]) == 1)
-	{
-		single_philo_error();
-		return (0);
-	}
 	x = 1;
 	while (av[x])
 	{
@@ -54,6 +51,11 @@ int	is_av_usable(int ac, char **av)
 			return (0);
 		}
 		x++;
+	}
+	if (ft_atoi(av[1]) == 1)
+	{
+		single_philo_error(ft_atoi(av[2]));
+		return (0);
 	}
 	return (1);
 }
